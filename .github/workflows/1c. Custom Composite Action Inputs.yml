@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+#We want to use caching for test and build jobs, but not for a lint job
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -11,8 +12,9 @@ jobs:
         uses: actions/checkout@v4
       - name: Load & cache dependencies
         uses: ./.github/actions/cached-deps-input
-#We have a caching input, thus I add the caching key here. We set it to false 
-#It should disable caching for this action in this step
+#We add a with keyword, then we have a caching input (from cached-deps-input/actions/yml),
+#Thus I add the caching key here. We set it to false 
+#It should disable caching for this action in this lint job in this step here
         with: 
           caching: 'false'
       - name: Lint code
@@ -65,7 +67,7 @@ jobs:
         run: echo "Deploying..."
 
 #In GitHub Action Workflow, in a lint job,
-# we can see that it does not cache the dependencies, but it reinstalls all dependencies every time this job runs
+#We can see that it does not cache the dependencies, but it reinstalls all dependencies every time this job runs
 #In a lint job, in a Load & cache dependencies -> we can see npm ci command (Install Dependencies), it does not use caching
 #But, for other jobs  such as test and build jobs, it uses caching - it gets the data from the cache
 #It restores cache successfully and it did not run the command to install dependencies!

@@ -74,4 +74,6 @@ jobs:
 
 #In jobs, where we use a Custom Action, in a Load & cache dependencies Step 
 #In a GitHub Action workflow we can see that we use a Custom Action
-#We can see ./.github/actions/cached-deps <- it is a path for a Custom Action
+#We can see ./.github/actions/cached-deps <- it is a path for a Custom Action. 
+#Therefore, our custom action was used successfully
+#What is more, we can see also that the dependencies were restored from the cache.

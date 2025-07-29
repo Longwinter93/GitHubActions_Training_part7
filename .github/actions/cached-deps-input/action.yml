@@ -1,8 +1,9 @@
 name: "Get & Cache Dependencies"
 description: "Get the dependencies (via npm) and cache them"
+#We want to add inputs that allows users to control whether dependencies should always be installed
 #We add inputs 'caching' that allows users of this action to turn off caching
-#a required field - we define if this input is needed or not. true - users must provide a value here 
-#if they don't, this action will fail. We set to a false if this action is not needed
+#A required field - we define if this input is needed or not. true - users must provide a value here 
+#If they don't, this action will fail. We set it to a false if this action is not needed
 #If you set a required field false, we must make sure that your action code does not fail if it is not provided!
 #To make sure that our action will still work, we add a defaul field.
 #We specify a true value in a default field. Thus, a default value is true
@@ -28,9 +29,9 @@ runs:
         key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
     - name: Install dependencies
 #We add OR condition to have this alternative condition.
-#If it is not equal to true, we do not want to use caching. This step should execute:
+#If inputs.caching is not equal to true, we do not want to use caching. This step should execute:
       if: steps.cache.outputs.cache-hit != 'true' || inputs.caching != 'true'
+#I do not want both conditions to be met
 #If either of two conditions is not met, we want to run this dependency installation command
       run: npm ci
-
       shell: bash
