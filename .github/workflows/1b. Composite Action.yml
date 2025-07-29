@@ -1,4 +1,10 @@
-name: Deployment
+name: Composite Action
+#We are going to create Actions that can be used only by this project
+#Therefore, we create a actions/cached-deps folder and create an action.yml file to create Custom Actions
+#If we want to create actions that are available to different workflows in different repositories 
+#We need to create a standalone repository
+#We intend to outsource the step for caching the dependencies and for installing dependencies into a separate action
+#We put these steps into a cached-deps folder. An action is a part of workflows
 on:
   push:
     branches:
@@ -9,15 +15,11 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v4
-      - name: Cache dependencies
-        id: cache
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
-      - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: npm ci
+#We use our own custom actions, we still use the uses key. 
+#This is a local action. It is stored locally in this project.
+#Therefore, we put in a value uses a path to this action folder
+      - name: Load & cache dependencies
+        uses: ./.github/actions/cached-deps
       - name: Lint code
         run: npm run lint
   test:
