@@ -10,6 +10,7 @@ runs:
       with:
         path: node_modules
         key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+#This steps says that we install dependencies if they were not found in the cache yet
     - name: Install dependencies
       if: steps.cache.outputs.cache-hit != 'true'
       run: npm ci

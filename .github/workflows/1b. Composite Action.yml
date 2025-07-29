@@ -27,15 +27,9 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v4
-      - name: Cache dependencies
-        id: cache
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
-      - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: npm ci
+#We add a Custom Action here:
+      - name: Load & cache dependencies
+        uses: ./.github/actions/cached-deps
       - name: Test code
         id: run-tests
         run: npm run test
@@ -51,15 +45,9 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v4
-      - name: Cache dependencies
-        id: cache
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
-      - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: npm ci
+#We add a Custom Action here:
+      - name: Load & cache dependencies
+        uses: ./.github/actions/cached-deps
       - name: Build website
         run: npm run build
       - name: Upload artifacts
@@ -82,3 +70,6 @@ jobs:
         run: ls
       - name: Deploy site
         run: echo "Deploying..."
+
+#In a lint job in a Load & cache dependencies step we can see that we use a Custom Action
+#We can see ./.github/actions/cached-deps <- it is a path for a Custom Action
