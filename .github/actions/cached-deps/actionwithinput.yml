@@ -1,0 +1,36 @@
+name: "Get & Cache Dependencies"
+description: "Get the dependencies (via npm) and cache them"
+#We add inputs 'caching' that allows users of this action to turn off caching
+#a required field - we define if this input is needed or not. true - users must provide a value here 
+#if they don't, this action will fail. We set to a false if this action is not needed
+#If you set a required field false, we must make sure that your action code does not fail if it is not provided!
+#To make sure that our action will still work, we add a defaul field.
+#We specify a true value in a default field. Thus, a default value is true
+inputs: 
+  caching:
+    description: 'Whether to cache dependencies or not'
+    required: false
+    default: 'true'
+#According to inputs, this action is not required - we have a default - this action would not fail
+runs:
+  using: "composite"
+  steps:
+    - name: Cache dependencies
+#We use a inputs context object to reach out this caching input. We refer to this caching inputs (line 10)
+#We use the same key name. It gives us access to this caching key on this input and we verify if it is true
+#If it is true, we want to use caching, then this step will be executed:
+      if: inputs.caching == 'true'
+      id: cache
+#But, if we set this (line 23) to set to any value but true, this step will not be executed thanks to this if check
+      uses: actions/cache@v4
+      with:
+        path: node_modules
+        key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+    - name: Install dependencies
+#We add OR condition to have this alternative condition.
+#If it is not equal to true, we do not want to use caching. This step should execute:
+      if: steps.cache.outputs.cache-hit != 'true' || inputs.caching != 'true'
+#If either of two conditions is not met, we want to run this dependency installation command
+      run: npm ci
+
+      shell: bash
