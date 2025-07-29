@@ -10,7 +10,7 @@ jobs:
       - name: Get code
         uses: actions/checkout@v4
       - name: Load & cache dependencies
-        uses: ./.github/actions/cached-deps/actionwithinput.yml
+        uses: ./.github/actions/cached-deps-input
 #We have a caching input, thus I add the caching key here. We set it to false 
 #It should disable caching for this action in this step
         with: 
@@ -23,7 +23,7 @@ jobs:
       - name: Get code
         uses: actions/checkout@v4
       - name: Load & cache dependencies
-        uses: ./.github/actions/cached-deps/actionwithinput.yml
+        uses: ./.github/actions/cached-deps-input
       - name: Test code
         id: run-tests
         run: npm run test
@@ -40,7 +40,7 @@ jobs:
       - name: Get code
         uses: actions/checkout@v4
       - name: Load & cache dependencies
-        uses: ./.github/actions/cached-deps/actionwithinput.yml
+        uses: ./.github/actions/cached-deps-input
       - name: Build website
         run: npm run build
       - name: Upload artifacts
