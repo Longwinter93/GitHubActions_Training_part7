@@ -5,12 +5,16 @@ inputs:
     description: 'Whether to cache dependencies or not'
     required: false
     default: 'true'
-#we can put outputs to our custom actions with a used-cached identifier
+#We can put outputs to our custom actions with a used-cached identifier
 #We add value to refer to one of our jobs with dynamic expression - a step context
 #We need to refer to one of our steps with help of ID assigned to these steps
-#We use ID from a Install Dependencies step
+#We added id to a Install Dependencies step (line 28)
+#We use ID from a Install Dependencies step (line 28)
+#After setting the value for the overall action output
+#We reach to this  install step (line 30), to the cache output (line 35) by using outputs.cache
+#Thanks to that, the value from lines 27 (input value), it will be provided for this used-cache output (line 17)
 outputs:
-  used-cached:
+  used-cache:
     description: 'Whether the cache was used'
     value: ${{ steps.install.outputs.cache }}
 runs:
@@ -26,6 +30,7 @@ runs:
     - name: Install dependencies
       id: install
       if: steps.cache.outputs.cache-hit != 'true' || inputs.caching != 'true'
+#I set a cache output of this step to the value of the caching input
       run: |
         npm ci
         echo "cache='${{ inputs.caching }}'" >> $GITHUB_OUTPUT

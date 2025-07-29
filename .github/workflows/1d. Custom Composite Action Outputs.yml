@@ -14,8 +14,12 @@ jobs:
         uses: ./.github/actions/cached-deps-output
         with: 
           caching: 'false'
+#This output of this action could be usef in the workflow after using this action
+#We add a dynamic expression and refer to the previous step by using id cache-deps (line 13)
+#Then, we add the output that I defined which is used-cache (an action.yml file line 17)
       - name: Output information
         run: echo 'Cache used? ${{ steps.cache-deps.outputs.used-cache }}'
+#It will print the output value of this custom action step -> Load & cache dependencies in a Output information step
       - name: Lint code
         run: npm run lint
   test:
