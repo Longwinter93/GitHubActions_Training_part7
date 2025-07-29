@@ -1,10 +1,4 @@
-name: 1b. Custom Composite Action
-#We are going to create Actions that can be used only by this project
-#Therefore, we create a actions/cached-deps folder and create an action.yml file to create Custom Actions
-#If we want to create actions that are available to different workflows in different repositories 
-#We need to create a standalone repository
-#We intend to outsource the step for caching the dependencies and for installing dependencies into a separate action
-#We put these steps into a cached-deps folder. An action is a part of workflows
+name: 1d. Custom Composite Action Outputs
 on:
   push:
     branches:
@@ -15,12 +9,13 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v4
-#We use our own custom actions, we still use the uses key (line 23). 
-#This is a local action. It is stored locally in this project.
-#Therefore, we put in a value uses a path to this action folder
-#We are going to use this Custom Actions in all jobs
       - name: Load & cache dependencies
-        uses: ./.github/actions/cached-deps
+        id: cache-deps
+        uses: ./.github/actions/cached-deps-output
+        with: 
+          caching: 'false'
+      - name: Output information
+        run: echo "Cache used? ${{ steps.cache-deps.outputs.used-cache }}"
       - name: Lint code
         run: npm run lint
   test:
@@ -28,9 +23,8 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v4
-#We add a Custom Action here:
       - name: Load & cache dependencies
-        uses: ./.github/actions/cached-deps
+        uses: ./.github/actions/cached-deps-output
       - name: Test code
         id: run-tests
         run: npm run test
@@ -46,9 +40,8 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v4
-#We add a Custom Action here:
       - name: Load & cache dependencies
-        uses: ./.github/actions/cached-deps
+        uses: ./.github/actions/cached-deps-output
       - name: Build website
         run: npm run build
       - name: Upload artifacts
@@ -72,8 +65,3 @@ jobs:
       - name: Deploy site
         run: echo "Deploying..."
 
-#In jobs, where we use a Custom Action, in a Load & cache dependencies Step 
-#In a GitHub Action workflow we can see that we use a Custom Action
-#We can see ./.github/actions/cached-deps <- it is a path for a Custom Action. 
-#Therefore, our custom action was used successfully
-#What is more, we can see also that the dependencies were restored from the cache.

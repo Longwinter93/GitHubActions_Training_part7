@@ -1,4 +1,4 @@
-name: Custom Composite Action Inputs
+name: 1c. Custom Composite Action Inputs
 on:
   push:
     branches:

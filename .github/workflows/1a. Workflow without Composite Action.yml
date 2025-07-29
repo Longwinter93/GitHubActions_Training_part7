@@ -1,4 +1,4 @@
-name: Workflow without Composite Action
+name: 1a. Workflow without Composite Action
 on:
   push:
     branches:
