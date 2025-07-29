@@ -64,3 +64,9 @@ jobs:
       - name: Deploy site
         run: echo "Deploying..."
 
+#In GitHub Action Workflow, in a lint job,
+# we can see that it does not cache the dependencies, but it reinstalls all dependencies every time this job runs
+#In a lint job, in a Load & cache dependencies -> we can see npm ci command (Install Dependencies), it does not use caching
+#But, for other jobs  such as test and build jobs, it uses caching - it gets the data from the cache
+#It restores cache successfully and it did not run the command to install dependencies!
+#This custom input works as intended

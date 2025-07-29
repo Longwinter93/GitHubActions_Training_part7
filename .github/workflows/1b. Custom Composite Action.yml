@@ -15,14 +15,12 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v4
-#We use our own custom actions, we still use the uses key. 
+#We use our own custom actions, we still use the uses key (line 23). 
 #This is a local action. It is stored locally in this project.
 #Therefore, we put in a value uses a path to this action folder
 #We are going to use this Custom Actions in all jobs
       - name: Load & cache dependencies
         uses: ./.github/actions/cached-deps
-        with: 
-          caching: 'false'
       - name: Lint code
         run: npm run lint
   test:
