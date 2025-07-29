@@ -1,10 +1,17 @@
 name: "Get & Cache Dependencies"
 description: "Get the dependencies (via npm) and cache them"
+#We add inputs
+inputs: 
+  caching:
+    description: 'Whether to cache dependencies or not'
+    required: true
+    default: 'true'
 #We add these two steps as steps to this Custom Action
 runs:
   using: "composite"
   steps:
     - name: Cache dependencies
+      if: inputs.caching == 'true'
       id: cache
       uses: actions/cache@v4
       with:
@@ -12,7 +19,7 @@ runs:
         key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
 #This steps says that we install dependencies if they were not found in the cache yet
     - name: Install dependencies
-      if: steps.cache.outputs.cache-hit != 'true'
+      if: steps.cache.outputs.cache-hit != 'true' || inputs.caching != 'true'
       run: npm ci
 #We need to add a special key - it is a shell key where you choose which shell should be used for executing this step
 #We use bash as a shell - we use shell in this step because we execute a command in a shell.

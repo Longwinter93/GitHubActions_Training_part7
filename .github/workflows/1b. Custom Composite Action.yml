@@ -1,4 +1,4 @@
-name: Composite Action
+name: Custom Composite Action
 #We are going to create Actions that can be used only by this project
 #Therefore, we create a actions/cached-deps folder and create an action.yml file to create Custom Actions
 #If we want to create actions that are available to different workflows in different repositories 
@@ -18,8 +18,11 @@ jobs:
 #We use our own custom actions, we still use the uses key. 
 #This is a local action. It is stored locally in this project.
 #Therefore, we put in a value uses a path to this action folder
+#We are going to use this Custom Actions in all jobs
       - name: Load & cache dependencies
         uses: ./.github/actions/cached-deps
+        with: 
+          cahcing: 'false'
       - name: Lint code
         run: npm run lint
   test:
@@ -71,5 +74,6 @@ jobs:
       - name: Deploy site
         run: echo "Deploying..."
 
-#In a lint job in a Load & cache dependencies step we can see that we use a Custom Action
+#In jobs, where we use a Custom Action, in a Load & cache dependencies Step 
+#In a GitHub Action workflow we can see that we use a Custom Action
 #We can see ./.github/actions/cached-deps <- it is a path for a Custom Action
