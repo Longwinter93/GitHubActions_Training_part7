@@ -69,4 +69,5 @@ jobs:
       - name: Deploy site
         run: echo "Deploying..."
 
+#In a GitHub Action workflow, in a lint job in an Output information step, it prints the output from a Custom Action Step
 
