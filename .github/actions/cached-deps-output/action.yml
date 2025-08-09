@@ -8,8 +8,8 @@ inputs:
 #We can put outputs to our custom actions with a used-cached identifier
 #We add value to refer to one of our jobs with dynamic expression - a step context
 #We need to refer to one of our steps with help of ID assigned to these steps
-#We added id to a Install Dependencies step (line 28)
-#We use ID from a Install Dependencies step (line 28)
+#We added id to a Install Dependencies step (line 31)
+#We use ID from a Install Dependencies step (line 31)
 #After setting the value for the overall action output
 #We reach to this  install step (line 30), to the cache output (line 35) by using outputs.cache
 #Thanks to that, the value from lines 27 (input value), it will be provided for this used-cache output (line 17)
@@ -35,4 +35,3 @@ runs:
         npm ci
         echo "cache='${{ inputs.caching }}'" >> $GITHUB_OUTPUT
       shell: bash
-#Reading about this cache inputs and this $GITHUB_OUTPUT!!!
